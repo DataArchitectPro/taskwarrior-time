@@ -6,7 +6,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 git config core.hooksPath .githooks
-chmod +x .githooks/pre-push scripts/check scripts/validate-plugin scripts/install-hooks
+chmod +x .githooks/pre-push scripts/check scripts/validate-plugin scripts/enable-git-hooks
 
 echo "git hooksPath -> .githooks (pre-push will run ./scripts/check)"
 echo "Try: git push (or ./scripts/check)"

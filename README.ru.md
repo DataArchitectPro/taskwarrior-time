@@ -183,7 +183,7 @@ omarchy plugin remove taskwarrior-time
 В клоне этого репозитория:
 
 ```bash
-./scripts/install-hooks   # один раз на клон — включает pre-push
+./scripts/enable-git-hooks   # один раз на клон — включает pre-push
 ./scripts/check           # validate манифеста + qmllint
 ```
 

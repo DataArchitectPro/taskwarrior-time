@@ -183,7 +183,7 @@ Please do **not** paste secrets, tokens, or private task content.
 From a clone of this repository:
 
 ```bash
-./scripts/install-hooks   # once per clone — enables pre-push checks
+./scripts/enable-git-hooks   # once per clone — enables pre-push checks
 ./scripts/check           # manifest validate + qmllint
 ```
 

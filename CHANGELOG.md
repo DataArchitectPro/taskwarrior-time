@@ -7,6 +7,13 @@ All notable changes to **Taskwarrior Time** are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-09-29
+
+### Fixed
+
+- Data directory and plugin files (`debug.log`, `ui-settings.json`, `extra-projects.json`) are created/repaired as `0700` / `0600` so other local users cannot read task text from debug logs
+- Debug `cmd.*` events no longer log free-text task descriptions (flags/UUIDs/verbs only)
+
 ## [1.0.1] - 2026-09-26
 
 ### Added
@@ -39,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Timers, dependencies, schedule fields, EN/RU UI
 - Marketplace listing and signed GitHub release assets
 
+[1.0.2]: https://github.com/DataArchitectPro/taskwarrior-time/releases/tag/v1.0.2
 [1.0.1]: https://github.com/DataArchitectPro/taskwarrior-time/releases/tag/v1.0.1
 [1.0.0]: https://github.com/DataArchitectPro/taskwarrior-time/releases/tag/v1.0.0
 
@@ -52,6 +60,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Формат основан на [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/),
 версии следуют [Semantic Versioning](https://semver.org/lang/ru/).
+
+## [1.0.2] - 2026-09-29
+
+### Исправлено
+
+- Каталог данных и файлы плагина (`debug.log`, `ui-settings.json`, `extra-projects.json`) создаются/чинятся как `0700` / `0600`, чтобы другие локальные пользователи не читали текст задач из debug-логов
+- События debug `cmd.*` больше не пишут свободный текст описаний задач (только флаги/UUID/команды)
 
 ## [1.0.1] - 2026-09-26
 

@@ -577,7 +577,43 @@ _LEGACY_EXTRA_PROJECTS_PATH = (
 
 
 def ensure_data_dir() -> None:
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    """Create the plugin data dir as owner-only (0700); repair if looser."""
+    DATA_DIR.mkdir(mode=0o700, parents=True, exist_ok=True)
+    try:
+        if (DATA_DIR.stat().st_mode & 0o777) != 0o700:
+            DATA_DIR.chmod(0o700)
+    except OSError:
+        pass
+
+
+def _ensure_private_file(path: Path) -> None:
+    """Tighten an existing file to 0600 before append/write."""
+    try:
+        if path.is_file() and (path.stat().st_mode & 0o777) != 0o600:
+            path.chmod(0o600)
+    except OSError:
+        pass
+
+
+def _open_private(path: Path, mode: str):
+    """Open/create a file with mode 0600 (owner read/write only)."""
+    ensure_data_dir()
+    flags = os.O_WRONLY | os.O_CREAT
+    if "a" in mode:
+        flags |= os.O_APPEND
+    elif "w" in mode:
+        flags |= os.O_TRUNC
+    fd = os.open(path, flags, 0o600)
+    try:
+        os.fchmod(fd, 0o600)
+    except OSError:
+        pass
+    return os.fdopen(fd, mode, encoding="utf-8")
+
+
+def _write_private_text(path: Path, text: str) -> None:
+    with _open_private(path, "w") as fh:
+        fh.write(text)
 
 
 def _normalize_ui_language(value: Any) -> str:
@@ -610,16 +646,15 @@ def load_ui_settings() -> dict[str, Any]:
 
 
 def save_ui_settings(settings: dict[str, Any]) -> None:
-    ensure_data_dir()
     payload = {
         "debugLogging": bool(settings.get("debugLogging")),
         "sessionId": str(settings.get("sessionId") or ""),
         "sessionStartedAt": str(settings.get("sessionStartedAt") or ""),
         "uiLanguage": _normalize_ui_language(settings.get("uiLanguage")),
     }
-    UI_SETTINGS_PATH.write_text(
+    _write_private_text(
+        UI_SETTINGS_PATH,
         json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
     )
 
 
@@ -717,6 +752,7 @@ def _rotate_debug_log_if_needed() -> None:
             if bak.is_file():
                 bak.unlink()
             DEBUG_LOG_PATH.rename(bak)
+            _ensure_private_file(bak)
     except OSError:
         pass
 
@@ -779,7 +815,8 @@ def append_debug_log(
         "pid": os.getpid(),
         "detail": payload if isinstance(payload, dict) else {"value": payload},
     }
-    with DEBUG_LOG_PATH.open("a", encoding="utf-8") as fh:
+    _ensure_private_file(DEBUG_LOG_PATH)
+    with _open_private(DEBUG_LOG_PATH, "a") as fh:
         fh.write(json.dumps(line, ensure_ascii=False) + "\n")
 
 
@@ -789,9 +826,9 @@ def write_session_banner(*, clear_file: bool = False) -> dict[str, Any]:
     session_id = str(settings.get("sessionId") or "")
     started_at = str(settings.get("sessionStartedAt") or "")
     env = collect_env_fingerprint()
-    ensure_data_dir()
     mode = "w" if clear_file else "a"
-    with DEBUG_LOG_PATH.open(mode, encoding="utf-8") as fh:
+    _ensure_private_file(DEBUG_LOG_PATH)
+    with _open_private(DEBUG_LOG_PATH, mode) as fh:
         _write_human_banner(fh, env, session_id, started_at)
     append_debug_log(
         "session.start",
@@ -924,7 +961,7 @@ def cmd_debug_log_clear(_: argparse.Namespace) -> int:
         )
     else:
         try:
-            DEBUG_LOG_PATH.write_text("", encoding="utf-8")
+            _write_private_text(DEBUG_LOG_PATH, "")
         except OSError as exc:
             return err_json(f"failed to recreate debug.log: {exc}")
 
@@ -967,10 +1004,9 @@ def save_extra_projects(names: list[str]) -> None:
         n = str(name or "").strip()
         if n and ":" not in n and n not in cleaned:
             cleaned.append(n)
-    EXTRA_PROJECTS_PATH.parent.mkdir(parents=True, exist_ok=True)
-    EXTRA_PROJECTS_PATH.write_text(
+    _write_private_text(
+        EXTRA_PROJECTS_PATH,
         json.dumps(sorted(cleaned, key=str.casefold), ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
     )
     # Remove legacy file so the plugin watcher stops spuriously reloading.
     try:

@@ -68,7 +68,7 @@ Panel {
   property string uiLanguage: "system" // system | ru | en
   property var _logQueue: []
   property bool _logFlushScheduled: false
-  readonly property string pluginVersion: "1.0.1"
+  readonly property string pluginVersion: "1.0.2"
   readonly property string githubUrl: "https://github.com/DataArchitectPro/taskwarrior-time"
   readonly property string changelogUrl: "https://github.com/DataArchitectPro/taskwarrior-time/blob/master/CHANGELOG.md"
   readonly property string newIssueUrl: "https://github.com/DataArchitectPro/taskwarrior-time/issues/new"
@@ -1008,12 +1008,23 @@ Panel {
   property real _cmdStartedAt: 0
 
   function _safeArgs(args) {
+    // Never put free-text task descriptions in the debug log — only flags,
+    // UUIDs, and known helper verbs. Length is enough to debug hangs.
+    var verbs = {
+      add: 1, mod: 1, done: 1, delete: 1, start: 1, stop: 1, export: 1,
+      projects: 1, "ui-settings": 1, "debug-log": 1, "extra-projects": 1,
+      version: 1, env: 1
+    }
     var out = []
     for (var i = 0; i < args.length; i++) {
       var a = String(args[i])
-      // Keep flags and short tokens; truncate long free text (descriptions).
-      if (a.length > 80) out.push(a.slice(0, 40) + "…(" + a.length + ")")
-      else out.push(a)
+      if (a.startsWith("-") || verbs[a]) {
+        out.push(a.length > 80 ? a.slice(0, 40) + "…(" + a.length + ")" : a)
+      } else if (/^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(a) || /^[0-9a-f]{8}$/i.test(a)) {
+        out.push(a)
+      } else {
+        out.push("<text:" + a.length + ">")
+      }
     }
     return out
   }

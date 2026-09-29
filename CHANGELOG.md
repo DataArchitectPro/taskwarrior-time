@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Data directory and plugin files (`debug.log`, `ui-settings.json`, `extra-projects.json`) are created/repaired as `0700` / `0600` so other local users cannot read task text from debug logs
 - Debug `cmd.*` events no longer log free-text task descriptions (flags/UUIDs/verbs only)
 
+### Screenshots
+
+- Refreshed EN/RU About screenshots (`docs/screenshots/*/03-about.png`) for v1.0.2
+
 ## [1.0.1] - 2026-09-26
 
 ### Added
@@ -67,6 +71,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Каталог данных и файлы плагина (`debug.log`, `ui-settings.json`, `extra-projects.json`) создаются/чинятся как `0700` / `0600`, чтобы другие локальные пользователи не читали текст задач из debug-логов
 - События debug `cmd.*` больше не пишут свободный текст описаний задач (только флаги/UUID/команды)
+
+### Скриншоты
+
+- Обновлены EN/RU скрины вкладки «О плагине» (`docs/screenshots/*/03-about.png`) для v1.0.2
 
 ## [1.0.1] - 2026-09-26
 

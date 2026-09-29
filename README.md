@@ -30,7 +30,7 @@ Anything you do here is stored in your normal Taskwarrior / Timewarrior data. Yo
 - **Unsaved changes** dialog when closing a dirty editor (Save / Keep editing / Discard)
 - Uniform **hotkeys**: `Ctrl+Enter` commit, `Esc` cancel, `Ctrl+Delete` destroy
 - **i18n**: English and Russian UI (system language, or pick one in About)
-- **About** tab with version, developer info, GitHub link, language switch, and debug logging toggle
+- **About** tab with version, developer info, What’s new / Marketplace / Report a problem / GitHub, language switch, and debug logging
 
 ### Task list
 
@@ -141,7 +141,7 @@ This disables the widget and deletes the git checkout under `~/.config/omarchy/p
 3. Expand **Filter** when you need status / project / priority / due / timer / deps or search.
 4. Click a task to expand the editor; **Save**, **Cancel**, or **Delete** at the bottom of the card.
 5. Focus the composer at the bottom to add a new task with the full form.
-6. Open **About** in the header tabs for version info, GitHub, and debug logging.
+6. Open **About** for version info, What’s new, Marketplace, Report a problem, GitHub, language, and debug logging.
 
 ![About & debug](docs/screenshots/en/03-about.png)
 

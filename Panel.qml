@@ -6,6 +6,7 @@ import Quickshell.Io
 import qs.Commons
 import qs.Ui
 import "Model.js" as Model
+import "ShortcutActions.js" as ShortcutActions
 import "i18n.js" as I18n
 
 Panel {
@@ -879,6 +880,16 @@ Panel {
   function openFromHotkey() {
     root.controller.show()
     refresh()
+  }
+
+  function focusNewTaskComposer() {
+    if (addField) addField.forceActiveFocus()
+  }
+
+  function openNewTaskFromHotkey() {
+    ShortcutActions.openNewTask(root, function(callback) {
+      Qt.callLater(callback)
+    })
   }
 
   function close() {
@@ -4508,6 +4519,7 @@ Panel {
     function open(): void { root.openFromHotkey() }
     function close(): void { root.close() }
     function toggle(): void { root.toggle() }
+    function newTask(): void { root.openNewTaskFromHotkey() }
     function about(): void {
       root.openFromHotkey()
       root.viewMode = "about"

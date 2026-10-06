@@ -21,6 +21,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y jq qt6-declarative-dev
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
       - name: Checkout Omarchy shell (qmllint import path)
         uses: actions/checkout@v5
         with:

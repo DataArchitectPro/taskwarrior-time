@@ -7,6 +7,12 @@ All notable changes to **Taskwarrior Time** are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- IPC action `newTask` opens the Tasks view and focuses the composer for configurable Hyprland keybindings
+
 ## [1.0.2] - 2026-09-29
 
 ### Fixed
@@ -64,6 +70,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Формат основан на [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/),
 версии следуют [Semantic Versioning](https://semver.org/lang/ru/).
+
+## [Не выпущено]
+
+### Добавлено
+
+- IPC-действие `newTask` открывает вкладку «Задачи» и фокусирует композер для настройки горячих клавиш Hyprland
 
 ## [1.0.2] - 2026-09-29
 

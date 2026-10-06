@@ -29,6 +29,7 @@ Anything you do here is stored in your normal Taskwarrior / Timewarrior data. Yo
 - **Projects** view: browse projects, rename, clear project from tasks
 - **Unsaved changes** dialog when closing a dirty editor (Save / Keep editing / Discard)
 - Uniform **hotkeys**: `Ctrl+Enter` commit, `Esc` cancel, `Ctrl+Delete` destroy
+- **Configurable Hyprland shortcut** to open the new-task composer
 - **i18n**: English and Russian UI (system language, or pick one in About)
 - **About** tab with version, developer info, What’s new / Marketplace / Report a problem / GitHub, language switch, and debug logging
 
@@ -145,6 +146,16 @@ This disables the widget and deletes the git checkout under `~/.config/omarchy/p
 
 ![About & debug](docs/screenshots/en/03-about.png)
 
+### Keyboard shortcut (Hyprland)
+
+The plugin exposes a `newTask` action through Quickshell IPC. Omarchy uses Lua for Hyprland bindings; add this to `~/.config/hypr/bindings.lua` (change the key combination if needed):
+
+```lua
+o.bind("SUPER + SHIFT + T", "New task", "qs ipc --path /usr/share/omarchy/shell call taskwarrior-time newTask")
+```
+
+Replace `/usr/share/omarchy/shell` if your Omarchy shell lives elsewhere. Omarchy normally reloads Hyprland config on save; run `hyprctl reload` if needed. The shortcut opens the Tasks view and focuses the new-task title field; it does not create a task until you save one.
+
 ## Debug logging
 
 When something misbehaves, turn on debug logging from the **About** tab.
@@ -180,11 +191,11 @@ Please do **not** paste secrets, tokens, or private task content.
 
 ## Development checks
 
-From a clone of this repository:
+From a clone of this repository (Node.js 22+ required for behavior tests):
 
 ```bash
 ./scripts/enable-git-hooks   # once per clone — enables pre-push checks
-./scripts/check           # manifest validate + qmllint
+./scripts/check           # manifest validate + behavior tests + qmllint
 ```
 
 `git push` runs the same checks via `.githooks/pre-push` and aborts if they fail. GitHub Actions runs `./scripts/check` on push and pull requests.

@@ -40,6 +40,15 @@ else
   fi
 fi
 
+# --- shortcut behavior tests ------------------------------------------------
+section "shortcut behavior tests"
+if command -v node >/dev/null 2>&1; then
+  node --test tests/shortcut-actions.test.js || FAILED=1
+else
+  echo "shortcut behavior tests: node is required" >&2
+  FAILED=1
+fi
+
 # --- 2) qmllint -------------------------------------------------------------
 section "qmllint"
 

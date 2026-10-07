@@ -30,6 +30,16 @@ jobs:
             shell
           sparse-checkout-cone-mode: true
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
       - name: Run checks
         env:
           OMARCHY_PATH: ${{ github.workspace }}/.ci/omarchy

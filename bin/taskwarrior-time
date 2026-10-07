@@ -618,7 +618,7 @@ def _write_private_text(path: Path, text: str) -> None:
 
 def _normalize_ui_language(value: Any) -> str:
     lang = str(value or "system").strip().lower()
-    if lang in ("system", "ru", "en"):
+    if lang in ("system", "ru", "en", "es"):
         return lang
     return "system"
 
@@ -1758,8 +1758,8 @@ def main() -> int:
     p_ss.add_argument(
         "--ui-language",
         default=None,
-        choices=["system", "ru", "en"],
-        help="UI language: system, ru, or en",
+        choices=["system", "ru", "en", "es"],
+        help="UI language: system, ru, en, or es",
     )
 
     p_dl = sub.add_parser("debug-log")

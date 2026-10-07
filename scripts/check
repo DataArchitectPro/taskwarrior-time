@@ -91,6 +91,23 @@ else
   fi
 fi
 
+# --- behavior tests ---------------------------------------------------------
+section "behavior tests"
+
+if command -v node >/dev/null 2>&1; then
+  node --test tests/i18n.test.js || FAILED=1
+else
+  echo "behavior tests: node is required for i18n.test.js" >&2
+  FAILED=1
+fi
+
+if command -v python3 >/dev/null 2>&1; then
+  python3 -m unittest discover -s tests -p 'test_*.py' || FAILED=1
+else
+  echo "behavior tests: python3 is required for helper settings tests" >&2
+  FAILED=1
+fi
+
 # --- summary ----------------------------------------------------------------
 section "summary"
 if ((FAILED)); then

@@ -1,35 +1,33 @@
 // Locale-aware strings for Taskwarrior Time (plugin id: taskwarrior-time).
 
-function isRussian(localeName) {
+function languageFromLocale(localeName) {
   var candidates = []
   if (localeName !== undefined && localeName !== null && String(localeName) !== "")
     candidates.push(String(localeName))
+  var loc = null
   try {
-    var loc = Qt.locale()
-    if (loc) {
-      if (loc.name) candidates.push(String(loc.name))
-      // Prefer the first UI language (e.g. "ru-RU", "ru") when set.
-      var ui = loc.uiLanguages
-      if (ui && ui.length > 0) candidates.push(String(ui[0]))
+    loc = Qt.locale()
+    if (loc && loc.uiLanguages) {
+      for (var i = 0; i < loc.uiLanguages.length; i++)
+        candidates.push(String(loc.uiLanguages[i]))
     }
   } catch (e) {}
+  if (loc && loc.name) candidates.push(String(loc.name))
 
-  for (var i = 0; i < candidates.length; i++) {
-    var raw = String(candidates[i] || "").toLowerCase().replace(/-/g, "_")
+  for (var j = 0; j < candidates.length; j++) {
+    var raw = String(candidates[j] || "").toLowerCase().replace(/-/g, "_")
     if (!raw) continue
-    // "ru", "ru_RU", "ru_RU.UTF-8", "ru.utf8"
+    // "es", "es_ES", "es_ES.UTF-8", "es.utf8" (and other supported languages).
     var lang = raw.split(".")[0].split("_")[0]
-    if (lang === "ru") return true
+    if (lang === "ru" || lang === "es" || lang === "en") return lang
   }
-  return false
+  return "en"
 }
 
 function t(key, localeName, uiLanguage) {
   var mode = String(uiLanguage || "system").toLowerCase()
-  var ru
-  if (mode === "ru") ru = true
-  else if (mode === "en") ru = false
-  else ru = isRussian(localeName)
+  var language = mode === "ru" || mode === "en" || mode === "es"
+    ? mode : languageFromLocale(localeName)
   var en = {
     title: "Taskwarrior Time",
     titleInProgress: "Taskwarrior Time",
@@ -170,6 +168,7 @@ function t(key, localeName, uiLanguage) {
     uiLanguageSystem: "System",
     uiLanguageRu: "Русский",
     uiLanguageEn: "English",
+    uiLanguageEs: "Spanish",
   }
   var ruMap = {
     title: "Taskwarrior Time",
@@ -311,7 +310,150 @@ function t(key, localeName, uiLanguage) {
     uiLanguageSystem: "Системный",
     uiLanguageRu: "Русский",
     uiLanguageEn: "English",
+    uiLanguageEs: "Испанский",
   }
-  var map = ru ? ruMap : en
+  var esMap = {
+    title: "Taskwarrior Time",
+    titleInProgress: "Taskwarrior Time",
+    projects: "Proyectos",
+    filterAll: "Todas",
+    filterActive: "Activas",
+    filterToday: "Hoy",
+    filterDone: "Completadas",
+    filterSpoiler: "Filtros",
+    filterClear: "Restablecer",
+    filterAny: "Cualquiera",
+    filterStatus: "Estado",
+    filterStatusOpen: "Abiertas",
+    filterStatusAll: "Cualquier estado",
+    filterProject: "Proyecto",
+    filterDue: "Vencimiento",
+    filterDueSoon: "Próximas",
+    filterTimer: "Temporizador",
+    filterTimerOn: "En marcha",
+    filterTimerOff: "Parado",
+    filterDeps: "Dependencias",
+    filterDepsClear: "Sin dependencias",
+    filterSearch: "Buscar",
+    filterSearchHint: "Descripción…",
+    groupBy: "Agrupar por",
+    groupNone: "Ninguno",
+    groupProject: "Proyecto",
+    groupPriority: "Prioridad",
+    groupDue: "Vencimiento",
+    groupStatus: "Estado",
+    addPlaceholder: "Nueva tarea…",
+    addSection: "Nueva tarea",
+    addDetails: "Campos de tarea",
+    addDetailsHide: "Ocultar campos",
+    advancedShow: "Programación, enlaces y tiempo",
+    advancedHide: "Ocultar programación, enlaces y tiempo",
+    startTimerOnCreate: "Iniciar temporizador al crear",
+    addTaskBtn: "Añadir tarea",
+    startDate: "Inicio",
+    endDate: "Fecha límite",
+    details: "Detalles",
+    detailsHint: "Notas adicionales…",
+    titleField: "Título",
+    editSectionPlan: "Planificación",
+    editSectionSchedule: "Fechas",
+    editSectionLinks: "Dependencias",
+    editSectionTime: "Tiempo",
+    priority: "Prioridad",
+    priorityNone: "—",
+    project: "Proyecto",
+    projectNone: "Sin proyecto",
+    allProjects: "Todos los proyectos",
+    add: "Añadir",
+    unsavedChanges: "Esta tarea tiene cambios sin guardar.",
+    unsavedSave: "Guardar",
+    unsavedContinue: "Seguir editando",
+    unsavedDiscard: "Descartar",
+    save: "Guardar",
+    cancel: "Cancelar",
+    deleteTask: "Eliminar",
+    confirmDelete: "¿Eliminar esta tarea?",
+    confirmClearProject: "¿Quitar este proyecto de todas las tareas?",
+    confirm: "Confirmar",
+    play: "Iniciar temporizador",
+    stop: "Detener temporizador",
+    todayTime: "Hoy",
+    adjustTime: "Ajustar tiempo",
+    adjustTimeHint: "30 min, 1 h, 1:30",
+    timeAdd: "+ Añadir",
+    timeRemove: "− Quitar",
+    done: "Hecha",
+    pending: "Pendiente",
+    waiting: "En espera",
+    waitingFor: "Esperando a",
+    waitingForHint: "¿Qué estás esperando?…",
+    outcome: "Resultado",
+    outcomeHint: "¿Cuál fue el resultado?…",
+    status: "Estado",
+    depends: "Depende de",
+    blocks: "Bloquea",
+    blocked: "Bloqueada",
+    blocking: "Bloquea",
+    overdue: "Vencida",
+    noTasks: "No hay tareas",
+    noProjects: "Aún no hay proyectos",
+    newProject: "Nuevo proyecto…",
+    rename: "Renombrar",
+    clearProject: "Quitar proyecto",
+    expand: "Detalles",
+    missingTaskwarrior: "Instala Taskwarrior (task)",
+    sectionNone: "Bandeja de entrada",
+    dueOverdue: "Vencidas",
+    dueToday: "Hoy",
+    dueTomorrow: "Mañana",
+    dueWeek: "Esta semana",
+    dueLater: "Más adelante",
+    dueNone: "Sin fecha límite",
+    priH: "alta",
+    priM: "media",
+    priL: "baja",
+    priNone: "Sin prioridad",
+    statusPending: "Pendiente",
+    statusCompleted: "Completada",
+    statusWaiting: "En espera",
+    tooltipTimer: "Temporizador",
+    tooltipOverdue: "%1 tareas vencidas",
+    tooltipPending: "%1 pendientes",
+    tooltipWaiting: "%1 en espera",
+    tooltipIdle: "No hay tareas abiertas",
+    tooltipDebugOn: "Registro de depuración activado",
+    viewTasks: "Tareas",
+    viewProjects: "Proyectos",
+    addDep: "Añadir dependencia",
+    noDepCandidates: "No hay otras tareas para vincular",
+    removeDep: "Quitar",
+    datesHint: "today, tomorrow, DD.MM.AAAA[ HH:MM:SS]",
+    dateApply: "Aplicar",
+    dateTime: "Hora",
+    dateClear: "Borrar",
+    about: "Acerca de",
+    aboutTitle: "Taskwarrior Time",
+    aboutVersion: "Versión",
+    aboutDeveloper: "Desarrollador",
+    aboutDeveloperName: "DataArchitectPro",
+    aboutGithub: "Abrir en GitHub",
+    aboutMarketplace: "Marketplace de Omarchy",
+    aboutChangelog: "Novedades",
+    aboutNewIssue: "Informar de un problema",
+    aboutLinks: "Ayuda y enlaces",
+    aboutClose: "Cerrar",
+    debugLog: "Registro de depuración",
+    debugLogOn: "Registro: ACTIVADO",
+    debugLogOff: "Registro: DESACTIVADO",
+    debugLogHint: "Escribe un registro de diagnóstico con versiones (plugin, Taskwarrior, Timewarrior y Omarchy) y eventos de la interfaz. Adjunta el archivo completo al informar de un problema.",
+    aboutOpenLogFolder: "Abrir carpeta de registros",
+    aboutClearLogs: "Borrar registros",
+    uiLanguage: "Idioma de la interfaz",
+    uiLanguageSystem: "Sistema",
+    uiLanguageRu: "Ruso",
+    uiLanguageEn: "Inglés",
+    uiLanguageEs: "Español",
+  }
+  var map = language === "es" ? esMap : (language === "ru" ? ruMap : en)
   return map[key] !== undefined ? map[key] : (en[key] !== undefined ? en[key] : key)
 }

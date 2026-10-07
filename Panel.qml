@@ -65,7 +65,7 @@ Panel {
   property bool debugLogging: false
   property string debugLogPath: ""
   property string debugSessionId: ""
-  property string uiLanguage: "system" // system | ru | en
+  property string uiLanguage: "system" // system | ru | en | es
   property var _logQueue: []
   property bool _logFlushScheduled: false
   readonly property string pluginVersion: "1.0.2"
@@ -1110,7 +1110,7 @@ Panel {
 
   function setUiLanguage(lang) {
     var next = String(lang || "system")
-    if (next !== "system" && next !== "ru" && next !== "en")
+    if (next !== "system" && next !== "ru" && next !== "en" && next !== "es")
       next = "system"
     root.uiLanguage = next
     settingsSetProc.command = [
@@ -1555,7 +1555,7 @@ Panel {
           root.debugLogging = !!data.debugLogging
           root.debugLogPath = String(data.logPath || "")
           root.debugSessionId = String(data.sessionId || "")
-          if (data.uiLanguage === "ru" || data.uiLanguage === "en" || data.uiLanguage === "system")
+          if (data.uiLanguage === "ru" || data.uiLanguage === "en" || data.uiLanguage === "es" || data.uiLanguage === "system")
             root.uiLanguage = String(data.uiLanguage)
           if (root.debugLogging)
             root.dlog("ui.settings.loaded", {
@@ -1582,7 +1582,7 @@ Panel {
           root.debugLogging = !!data.debugLogging
           root.debugLogPath = String(data.logPath || "")
           root.debugSessionId = String(data.sessionId || "")
-          if (data.uiLanguage === "ru" || data.uiLanguage === "en" || data.uiLanguage === "system")
+          if (data.uiLanguage === "ru" || data.uiLanguage === "en" || data.uiLanguage === "es" || data.uiLanguage === "system")
             root.uiLanguage = String(data.uiLanguage)
           // Banner already written by helper on enable; acknowledge from UI.
           if (root.debugLogging)
@@ -4244,6 +4244,16 @@ Panel {
                     verticalPadding: Style.space(2)
                     horizontalPadding: Style.space(8)
                     onClicked: root.setUiLanguage("en")
+                  }
+                  Button {
+                    text: root.tr("uiLanguageEs")
+                    selected: root.uiLanguage === "es"
+                    foreground: root.foreground
+                    fontFamily: root.fontFamily
+                    fontSize: Style.font.caption
+                    verticalPadding: Style.space(2)
+                    horizontalPadding: Style.space(8)
+                    onClicked: root.setUiLanguage("es")
                   }
                 }
               }

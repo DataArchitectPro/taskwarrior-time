@@ -29,7 +29,7 @@ Anything you do here is stored in your normal Taskwarrior / Timewarrior data. Yo
 - **Projects** view: browse projects, rename, clear project from tasks
 - **Unsaved changes** dialog when closing a dirty editor (Save / Keep editing / Discard)
 - Uniform **hotkeys**: `Ctrl+Enter` commit, `Esc` cancel, `Ctrl+Delete` destroy
-- **i18n**: English and Russian UI (system language, or pick one in About)
+- **i18n**: English, Russian, and Spanish UI (system language, or pick one in About)
 - **About** tab with version, developer info, What’s new / Marketplace / Report a problem / GitHub, language switch, and debug logging
 
 ### Task list
@@ -180,11 +180,11 @@ Please do **not** paste secrets, tokens, or private task content.
 
 ## Development checks
 
-From a clone of this repository:
+From a clone of this repository (Node.js 22+ and Python 3 required for behavior tests):
 
 ```bash
 ./scripts/enable-git-hooks   # once per clone — enables pre-push checks
-./scripts/check           # manifest validate + qmllint
+./scripts/check           # manifest validate + behavior tests + qmllint
 ```
 
 `git push` runs the same checks via `.githooks/pre-push` and aborts if they fail. GitHub Actions runs `./scripts/check` on push and pull requests.
